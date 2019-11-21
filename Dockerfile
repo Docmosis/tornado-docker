@@ -37,7 +37,7 @@ RUN yum install -y https://downloads.sourceforge.net/project/mscorefonts2/rpms/m
     && yum clean all \
     && rm -rf /var/cache/yum
 
-ENV LIBREOFFICE_VERSION=6.1.6.3
+ENV LIBREOFFICE_VERSION=6.2.8.2
 ENV LIBREOFFICE_MIRROR=https://downloadarchive.documentfoundation.org/libreoffice/old/
 
 RUN echo "Downloading LibreOffice ${LIBREOFFICE_VERSION}..." \
