@@ -147,7 +147,7 @@ The following content could be placed in your docker-compose.yml file:
     services:
 
       tornado:
-        image: docmosis/tornado
+        build: https://raw.githubusercontent.com/docmosis/tornado-docker/master/Dockerfile
         ports:
          - "[host port]:8080"
         volumes:
