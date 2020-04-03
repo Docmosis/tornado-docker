@@ -245,9 +245,9 @@ service except for:
 
 Tornado includes two web service end-points to support automated monitoring:
 
-"ping" e.g. http://localhost:8080/rs/ping
+"ping" e.g. http://localhost:8080/api/ping
 
-"status" e.g. http://localhost:8080/rs/status
+"status" e.g. http://localhost:8080/api/status
 
 See the Tornado Web Services Guide for details about these monitoring
 end-points.
