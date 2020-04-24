@@ -341,6 +341,9 @@ page to enable
 - `templateSuffix`  
   Specify the template field suffix. Defaults to >>. Must be at least 2 chars.
 
+- `installSamples`  
+  Specify whether to install sample templates at startup. Defaults to true.
+
 ### Control of Logging
 
 Logging of information by Tornado can be controlled by several command line

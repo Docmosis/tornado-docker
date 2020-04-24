@@ -64,7 +64,7 @@ RUN groupadd docmosis \
 
 WORKDIR /home/docmosis
 
-ENV DOCMOSIS_VERSION=2.8.1_9131
+ENV DOCMOSIS_VERSION=2.8.2_9203
 
 RUN DOCMOSIS_VERSION_SHORT=$(echo $DOCMOSIS_VERSION | cut -f1 -d_) \
     && echo "Downloading Docmosis Tornado ${DOCMOSIS_VERSION}..." \
