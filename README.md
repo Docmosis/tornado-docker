@@ -273,32 +273,42 @@ page to enable
 - `port`  
   Specify the port on which the console and the web services will listen
 
+  ```
+  docker run -p 8080:8090 \
+   -e DOCMOSIS_PORT=8090 \
+   ...
+  ```
+
 - `license`  
    Specify the Tornado license all as one string. This includes the key and the
   site and overrides the key and site parameters below. "\n" is used to provide
-  separate lines.  
-   eg
+  separate lines.
 
   ```
-  license="docmosis.key=XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-X-XXXX\ndocmosis.site=Free Trial License"
+  docker run \
+   -e DOCMOSIS_LICENSE="docmosis.key=XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-X-XXXX\ndocmosis.site=Free Trial License" \
+   ...
   ```
 
 - `key`  
-   Specify the key part of the Tornado license. This requires the site or site1-3 parameters also.  
-   eg
+   Specify the key part of the Tornado license. This requires the site or site1-3 parameters also.
 
   ```
-  key="docmosis.key=XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-X-XXXX"
-  site="Docmosis.site=Free Trial License"
+  docker run \
+  -e DOCMOSIS_KEY=XXXX-XXXX-XXXX-XXXX-X-XXXX \
+  -e DOCMOSIS_SITE="Free Trial License" \
+  ...
   ```
 
   or
 
   ```
-  key="docmosis.key=XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-X-XXXX"
-  site1="Docmosis.site=Free Trial License"
-  site2="next line of site string" (if required)
-  site3="another line of site string" (if required)
+  docker run \
+  -e DOCMOSIS_KEY=XXXX-XXXX-XXXX-XXXX-X-XXXX \
+  -e DOCMOSIS_SITE1="Free Trial License" \
+  -e DOCMOSIS_SITE2="next line of site string" (if required)" \
+  -e DOCMOSIS_SITE3="another line of site string" (if required)" \
+  ...
   ```
 
 - `site`  
@@ -318,31 +328,84 @@ page to enable
 - `officeDir`  
   Specify the office install location for LibreOffice
 
+  ```
+  docker run \
+   -e DOCMOSIS_OFFICEDIR=/opt/libreoffice \
+   ...
+  ```
+
 - `templatesDir`  
   Specify where templates will be sourced from (original templates)
+
+  ```
+  docker run \
+   -e DOCMOSIS_TEMPLATESDIR=/home/docmosis/templates \
+   ...
+  ```
 
 - `workingDir`  
    Specify where logs and working caches are to be stored
 
+  ```
+  docker run \
+   -e DOCMOSIS_WORKINGDIR=/home/docmosis/workingarea \
+   ...
+  ```
+
 - `adminPw`  
   Specify the admin password for access the web console. Optional.
+
+  ```
+  docker run \
+   -e DOCMOSIS_ADMINPW=password \
+   ...
+  ```
 
 - `accessKey`  
   Specify the access key for calling the web service end points. Optional.
 
+  ```
+  docker run \
+   -e DOCMOSIS_ACCESSKEY=access-key \
+   ...
+  ```
+
 - `customSettings`  
   Specify any custom settings using the format key=value and separating settings
-  by "\n". For example:  
-  `customSettings="docmosis.xyz=abc\ndocmosis.xyz.2=def"`
+  by "\n".
+
+  ```
+  docker run \
+   -e DOCMOSIS_CUSTOMSETTINGS="docmosis.xyz=abc\ndocmosis.xyz.2=def" \
+   ...
+  ```
 
 - `templatePrefix`  
   Specify the template field prefix. Defaults to <<. Must be at least 2 chars.
 
+  ```
+  docker run \
+   -e DOCMOSIS_TEMPLATEPREFIX=<< \
+   ...
+  ```
+
 - `templateSuffix`  
   Specify the template field suffix. Defaults to >>. Must be at least 2 chars.
 
+  ```
+  docker run \
+   -e DOCMOSIS_TEMPLATESUFFIX=>> \
+   ...
+  ```
+
 - `installSamples`  
   Specify whether to install sample templates at startup. Defaults to true.
+
+  ```
+  docker run \
+   -e DOCMOSIS_INSTALLSAMPLES=false \
+   ...
+  ```
 
 ### Control of Logging
 
@@ -350,19 +413,40 @@ Logging of information by Tornado can be controlled by several command line
 settings:
 
 - `log.level=debug|info|error`  
-  Specify the level of logging to the console and log files.  
-  eg: `java –Dlog.level=debug –jar docmosisTornado.war`
+  Specify the level of logging to the console and log files.
+
+  ```
+  docker run \
+   -e DOCMOSIS_LOG_LEVEL=debug= \
+   ...
+  ```
 
 - `log4j.config.file=path`  
-  Specify log4j logging configuration file. Overrides log4j.level  
-  eg: `java –Dlog4j.config.file=c:/projects/log4j.properties –jar docmosisTornado.war`
+  Specify log4j logging configuration file. Overrides log4j.level
+
+  ```
+  docker run \
+   -e DOCMOSIS_LOG4J_CONFIG_FILE=/home/docmosis/log4j.properties \
+   ...
+  ```
 
 - `java.util.logging.config.file=path`  
-  Specify the Java Util logging configuration file. Overrides log.level.  
-  eg: `java –Djava.util.logging.config.file=c:/logging.properties ..`
+  Specify the Java Util logging configuration file. Overrides log.level.
+
+  ```
+  docker run \
+   -e DOCMOSIS_JAVA_UTIL_LOGGING_CONFIG_FILE=/home/docmosis/logging.properties \
+   ...
+  ```
 
 - `log.dir.override`  
   Override the location where logs are to be written (default is `[working area]/logs`)
+
+  ```
+  docker run \
+   -e DOCMOSIS_LOG_DIR_OVERRIDE=/home/docmosis/workingarea/logs \
+   ...
+  ```
 
 ### Enabling SSL/TLS Encryption
 
@@ -387,6 +471,17 @@ page to enable SSL/TLS Encryption:
 - `http.disable=true|false`  
   Determines whether the non-secure listener should be disabled. Defaults to
   false.
+
+  ```
+  docker run -p 8081:8081 \
+   -e DOCMOSIS_SSL_PORT=8081 \
+   -e DOCMOSIS_JAVAX_NET_SSL_KEYSTORE=/home/docmosis/keystore \
+   -e DOCMOSIS_JAVAX_NET_SSL_KEYSTOREPASSWORD=password \
+   -e DOCMOSIS_JAVAX_NET_SSL_TRUSTSTORE=/home/docmosis/truststore \
+   -e DOCMOSIS_JAVAX_NET_SSL_TRUSTSTOREPASSWORD=password \
+   -e DOCMOSIS_HTTP_DISABLE=true \
+   ...
+  ```
 
 Please see your Java documentation for more information on the specifics of what
 these settings do.
@@ -419,6 +514,20 @@ these settings do.
 
 - `mailUseSsl`  
   Enable SSL security on the connection to the mail server. Default false.
+
+  ```
+  docker run \
+   -e DOCMOSIS_MAILENABLED=true \
+   -e DOCMOSIS_MAILHOST=example.com \
+   -e DOCMOSIS_MAILPORT=25 \
+   -e DOCMOSIS_MAILUSER=user \
+   -e DOCMOSIS_MAILPW=password \
+   -e DOCMOSIS_MAILFROM=user@example.com \
+   -e DOCMOSIS_MAILTIMEOUT=60000 \
+   -e DOCMOSIS_MAILUSETLS=true \
+   -e DOCMOSIS_MAILUSESSL=true \
+   ...
+  ```
 
 ## License
 
