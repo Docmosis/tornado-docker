@@ -74,6 +74,13 @@ RUN DOCMOSIS_VERSION_SHORT=$(echo $DOCMOSIS_VERSION | cut -f1 -d_) \
     && mv docmosisTornado*.war docmosisTornado.war \
     && rm -f docmosisTornado${DOCMOSIS_VERSION}.zip
 
+# mscorefonts2 does not currently install cambria.ttc
+RUN echo "Downloading Cambria font collection..." \
+    && wget --quiet -O PowerPointViewer.exe http://downloads.sourceforge.net/mscorefonts2/PowerPointViewer.exe \
+    && cabextract --lowercase -F 'ppviewer.cab' PowerPointViewer.exe \
+    && cabextract --lowercase -F '*.ttc' --directory=/usr/share/fonts/msttcore ppviewer.cab \
+    && rm -f PowerPointViewer.exe ppviewer.cab
+
 RUN printf '%s\n' \
     "#Normal logging at INFO level" \
     "log4j.rootCategory=INFO, A1" \
