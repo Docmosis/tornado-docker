@@ -58,7 +58,7 @@ Linux Shell:
     docker run -p 8080:8080 \
       -v /home/docmosisTemplates:/home/docmosis/templates \
       -e DOCMOSIS_KEY=XXXX-XXXX-XXXX-XXXX-X-XXXX \
-      -e DOCMOSIS_SITE="Free Trial License" \
+      -e DOCMOSIS_SITE="Free Trial Tornado" \
       docmosis/tornado
 
 For example, in **Windows** to use a folder C:\docmosisTemplates with a Tornado
@@ -69,7 +69,7 @@ Using Windows CMD:
     docker run -p 8080:8080 ^
       -v C:\docmosisTemplates:/home/docmosis/templates ^
       -e DOCMOSIS_KEY=XXXX-XXXX-XXXX-XXXX-X-XXXX ^
-      -e DOCMOSIS_SITE="Free Trial License" ^
+      -e DOCMOSIS_SITE="Free Trial Tornado" ^
       docmosis/tornado
 
 Using Windows PowerShell:
@@ -77,7 +77,7 @@ Using Windows PowerShell:
     docker run -p 8080:8080 `
       -v C:\docmosisTemplates:/home/docmosis/templates `
       -e DOCMOSIS_KEY=XXXX-XXXX-XXXX-XXXX-X-XXXX `
-      -e DOCMOSIS_SITE="Free Trial License" `
+      -e DOCMOSIS_SITE="Free Trial Tornado" `
       docmosis/tornado
 
 ## Container Settings
@@ -286,7 +286,7 @@ page to enable
 
   ```
   docker run \
-   -e DOCMOSIS_LICENSE="docmosis.key=XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-X-XXXX\ndocmosis.site=Free Trial License" \
+   -e DOCMOSIS_LICENSE="docmosis.key=XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-X-XXXX\ndocmosis.site=Free Trial Tornado" \
    ...
   ```
 
@@ -296,7 +296,7 @@ page to enable
   ```
   docker run \
   -e DOCMOSIS_KEY=XXXX-XXXX-XXXX-XXXX-X-XXXX \
-  -e DOCMOSIS_SITE="Free Trial License" \
+  -e DOCMOSIS_SITE="Free Trial Tornado" \
   ...
   ```
 
@@ -305,7 +305,7 @@ page to enable
   ```
   docker run \
   -e DOCMOSIS_KEY=XXXX-XXXX-XXXX-XXXX-X-XXXX \
-  -e DOCMOSIS_SITE1="Free Trial License" \
+  -e DOCMOSIS_SITE1="Free Trial Tornado" \
   -e DOCMOSIS_SITE2="next line of site string" (if required)" \
   -e DOCMOSIS_SITE3="another line of site string" (if required)" \
   ...
