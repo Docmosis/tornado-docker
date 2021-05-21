@@ -55,6 +55,13 @@ RUN echo "Downloading LibreOffice ${LIBREOFFICE_VERSION}..." \
     && rm -f LibreOffice_*_Linux_x86-64_rpm.tar.gz \
     && ln -s /opt/libreoffice* /opt/libreoffice
 
+# mscorefonts2 does not currently install cambria.ttc
+RUN echo "Downloading Cambria font collection..." \
+    && wget --quiet -O PowerPointViewer.exe http://downloads.sourceforge.net/mscorefonts2/PowerPointViewer.exe \
+    && cabextract --lowercase -F 'ppviewer.cab' PowerPointViewer.exe \
+    && cabextract --lowercase -F '*.ttc' --directory=/usr/share/fonts/msttcore ppviewer.cab \
+    && rm -f PowerPointViewer.exe ppviewer.cab
+
 RUN groupadd docmosis \
     && useradd -g docmosis \
     --create-home \
@@ -64,7 +71,7 @@ RUN groupadd docmosis \
 
 WORKDIR /home/docmosis
 
-ENV DOCMOSIS_VERSION=2.8.3
+ENV DOCMOSIS_VERSION=2.8.4
 
 RUN DOCMOSIS_VERSION_SHORT=$(echo $DOCMOSIS_VERSION | cut -f1 -d_) \
     && echo "Downloading Docmosis Tornado ${DOCMOSIS_VERSION}..." \
@@ -73,13 +80,6 @@ RUN DOCMOSIS_VERSION_SHORT=$(echo $DOCMOSIS_VERSION | cut -f1 -d_) \
     && unzip docmosisTornado${DOCMOSIS_VERSION}.zip docmosisTornado*.war docs/* licenses/* \
     && mv docmosisTornado*.war docmosisTornado.war \
     && rm -f docmosisTornado${DOCMOSIS_VERSION}.zip
-
-# mscorefonts2 does not currently install cambria.ttc
-RUN echo "Downloading Cambria font collection..." \
-    && wget --quiet -O PowerPointViewer.exe http://downloads.sourceforge.net/mscorefonts2/PowerPointViewer.exe \
-    && cabextract --lowercase -F 'ppviewer.cab' PowerPointViewer.exe \
-    && cabextract --lowercase -F '*.ttc' --directory=/usr/share/fonts/msttcore ppviewer.cab \
-    && rm -f PowerPointViewer.exe ppviewer.cab
 
 RUN printf '%s\n' \
     "#Normal logging at INFO level" \

@@ -515,6 +515,31 @@ these settings do.
 - `mailUseSsl`  
   Enable SSL security on the connection to the mail server. Default false.
 
+- `mailConnectRetryMaxTimes`  
+  Set the maximum number of attempts to connect to the mail server.
+  Default 2.
+
+- `mailConnectRetryMinWaitMillis`  
+  Set the minimum wait time to get a connection to the mail server.
+  Default 5000ms.
+
+- `mailConnectRetryMaxWaitMillis`  
+  Set the maximum wait time to get a connection to the mail server.
+  Default 20000ms.
+
+- `mailConnectRetryRebuildTransport`  
+  Rebuild the Message Transport object on failure to connect. Default
+  true.
+
+- `mailSendRetryMaxTimes`  
+  Set the maximum number of attempts to send email. Default 2.
+
+- `mailCustomHeadersAdd`  
+  Add a custom mail header. Default true.
+
+- `mailCustomHeadersName`  
+  Set the custom header name. Default X-DWS-Tag-1
+
   ```
   docker run \
    -e DOCMOSIS_MAILENABLED=true \
