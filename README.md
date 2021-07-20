@@ -490,7 +490,7 @@ these settings do.
 
 The following settings provide network specific adjustments:
 
-- `address.listent=<address>`  
+- `address.listen=<address>`  
   The network address on which to listen for requests. Defaults to
   all networks (0.0.0.0).
 
