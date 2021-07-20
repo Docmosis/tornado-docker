@@ -486,6 +486,19 @@ page to enable SSL/TLS Encryption:
 Please see your Java documentation for more information on the specifics of what
 these settings do.
 
+### Other Network Settings
+
+The following settings provide network specific adjustments:
+
+- `address.listent=<address>`  
+  The network address on which to listen for requests. Defaults to
+  all networks (0.0.0.0).
+
+- `keepAlive=true|false`  
+  Specify whether to set keep alive on network connections. This useful
+  in environments where network infrastructure agressively closes idle
+  connections. (eg long running renders in Azure). Defaults to false.
+
 ### Enabling Email from Tornado
 
 - `mailEnabled`  
