@@ -1,9 +1,8 @@
-FROM centos:7
+FROM centos:8
 
 # epel for cabextract
-RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7 \
-    && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
-    && rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7 \
+RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm \
+    && rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-8 \
     && yum install -y --setopt=tsflags=nodocs \
     java-1.8.0-openjdk \
     #
@@ -33,10 +32,6 @@ RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7 \
     && yum clean all \
     && rm -rf /var/cache/yum
 
-RUN yum install -y https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm \
-    && yum clean all \
-    && rm -rf /var/cache/yum
-
 ENV LIBREOFFICE_VERSION=6.2.8.2
 ENV LIBREOFFICE_MIRROR=https://downloadarchive.documentfoundation.org/libreoffice/old/
 
@@ -54,6 +49,10 @@ RUN echo "Downloading LibreOffice ${LIBREOFFICE_VERSION}..." \
     && rm -rf LibreOffice_*_Linux_x86-64_rpm \
     && rm -f LibreOffice_*_Linux_x86-64_rpm.tar.gz \
     && ln -s /opt/libreoffice* /opt/libreoffice
+
+RUN yum install -y https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm \
+    && yum clean all \
+    && rm -rf /var/cache/yum
 
 # mscorefonts2 does not currently install cambria.ttc
 RUN echo "Downloading Cambria font collection..." \
