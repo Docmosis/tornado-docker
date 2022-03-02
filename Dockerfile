@@ -38,7 +38,7 @@ RUN yum install -y https://downloads.sourceforge.net/project/mscorefonts2/rpms/m
     && yum clean all \
     && rm -rf /var/cache/yum
 
-ENV LIBREOFFICE_VERSION=6.2.8.2
+ENV LIBREOFFICE_VERSION=7.3.0.3
 ENV LIBREOFFICE_MIRROR=https://downloadarchive.documentfoundation.org/libreoffice/old/
 
 RUN echo "Downloading LibreOffice ${LIBREOFFICE_VERSION}..." \
@@ -72,7 +72,7 @@ RUN groupadd docmosis \
 
 WORKDIR /home/docmosis
 
-ENV DOCMOSIS_VERSION=2.8.6
+ENV DOCMOSIS_VERSION=2.9.0
 
 RUN DOCMOSIS_VERSION_SHORT=$(echo $DOCMOSIS_VERSION | cut -f1 -d_) \
     && echo "Downloading Docmosis Tornado ${DOCMOSIS_VERSION}..." \
@@ -83,16 +83,17 @@ RUN DOCMOSIS_VERSION_SHORT=$(echo $DOCMOSIS_VERSION | cut -f1 -d_) \
     && rm -f docmosisTornado${DOCMOSIS_VERSION}.zip
 
 RUN printf '%s\n' \
+    "handlers=java.util.logging.ConsoleHandler" \
     "#Normal logging at INFO level" \
-    "log4j.rootCategory=INFO, A1" \
+    ".level=INFO" \
     "" \
     "#Detailed logging at DEBUG level" \
-    "#log4j.rootCategory=DEBUG, A1" \
+    "#.level=FINE" \
     "" \
-    "log4j.appender.A1=org.apache.log4j.ConsoleAppender" \
-    "log4j.appender.A1.layout=org.apache.log4j.PatternLayout" \
-    "log4j.appender.A1.layout.ConversionPattern=%d{DATE} [%t] %-5p %c{1} - %m%n" \
-    > /home/docmosis/log4j.properties
+    "java.util.logging.ConsoleHandler.level=FINE" \
+    "java.util.logging.ConsoleHandler.formatter=com.docmosis.webserver.launch.logging.TornadoLogFormatter" \
+    'java.util.logging.ConsoleHandler.format=%1$tH:%1$tM:%1$tS,%1$tL [%2$s] %3$s  %4$s - %5$s %6$s%n' \
+    > /home/docmosis/javaLogging.properties
 
 USER docmosis
 RUN mkdir /home/docmosis/templates /home/docmosis/workingarea
@@ -100,9 +101,8 @@ RUN mkdir /home/docmosis/templates /home/docmosis/workingarea
 # Tornado configuration
 ENV DOCMOSIS_OFFICEDIR=/opt/libreoffice \
     DOCMOSIS_TEMPLATESDIR=templates \
-    DOCMOSIS_WORKINGDIR=workingarea \
-    DOCMOSIS_LOG4J_CONFIG_FILE=log4j.properties
+    DOCMOSIS_WORKINGDIR=workingarea
 
 EXPOSE 8080
 VOLUME /home/docmosis/templates
-CMD java -Ddocmosis.tornado.render.useUrl=http://localhost:8080/ -jar docmosisTornado.war
+CMD java -Djava.util.logging.config.file=javaLogging.properties -Ddocmosis.tornado.render.useUrl=http://localhost:8080/ -jar docmosisTornado.war

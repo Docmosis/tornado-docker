@@ -107,10 +107,9 @@ typical use-cases.
 
 ### Logging outside of the Docker Container
 
-The Tornado container will by default log to console. This is set by a log4j
-configuration file included in the image. You may instead wish to have the logs
+The Tornado container will by default log to console. You may instead wish to have the logs
 written to a file outside of the Docker container so they are accessible (and
-persistent). To write the logs to file, you can override the log4j configuration
+persistent). To write the logs to file, you can override the configuration
 to a blank value, and then map a volume to the default log folder
 `/home/docmosis/workingarea/logs`.
 
@@ -121,7 +120,7 @@ To set the logging to write outside the container:
       -v [host templates directory]:/home/docmosis/templates \
       -e DOCMOSIS_KEY=[license key] \
       -e DOCMOSIS_SITE=[license site] \
-      -e DOCMOSIS_LOG4J_CONFIG_FILE= \
+      -e DOCMOSIS_JAVA_LOGGING_CONFIG_FILE= \
       -v [host logging directory]:/home/docmosis/workingarea/logs \
       docmosis/tornado
 
@@ -418,15 +417,6 @@ settings:
   ```
   docker run \
    -e DOCMOSIS_LOG_LEVEL=debug= \
-   ...
-  ```
-
-- `log4j.config.file=path`  
-  Specify log4j logging configuration file. Overrides log4j.level
-
-  ```
-  docker run \
-   -e DOCMOSIS_LOG4J_CONFIG_FILE=/home/docmosis/log4j.properties \
    ...
   ```
 
