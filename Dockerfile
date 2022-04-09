@@ -72,7 +72,7 @@ RUN groupadd docmosis \
 
 WORKDIR /home/docmosis
 
-ENV DOCMOSIS_VERSION=2.9.0
+ENV DOCMOSIS_VERSION=2.9.1
 
 RUN DOCMOSIS_VERSION_SHORT=$(echo $DOCMOSIS_VERSION | cut -f1 -d_) \
     && echo "Downloading Docmosis Tornado ${DOCMOSIS_VERSION}..." \
@@ -105,4 +105,4 @@ ENV DOCMOSIS_OFFICEDIR=/opt/libreoffice \
 
 EXPOSE 8080
 VOLUME /home/docmosis/templates
-CMD java -Djava.util.logging.config.file=javaLogging.properties -Ddocmosis.tornado.render.useUrl=http://localhost:8080/ -jar docmosisTornado.war
+CMD java -Dport=8080 -Djava.util.logging.config.file=javaLogging.properties -Ddocmosis.tornado.render.useUrl=http://localhost:8080/ -jar docmosisTornado.war
