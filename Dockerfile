@@ -6,7 +6,7 @@ RUN yum update -y \
     && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
     && rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7 \
     && yum install -y --setopt=tsflags=nodocs \
-    java-1.8.0-openjdk \
+    java-11-openjdk \
     #
     # libreoffice requirements
     cairo \
@@ -91,8 +91,8 @@ RUN printf '%s\n' \
     "#.level=FINE" \
     "" \
     "java.util.logging.ConsoleHandler.level=FINE" \
-    "java.util.logging.ConsoleHandler.formatter=com.docmosis.webserver.launch.logging.TornadoLogFormatter" \
-    'java.util.logging.ConsoleHandler.format=%1$tH:%1$tM:%1$tS,%1$tL [%2$s] %3$s  %4$s - %5$s %6$s%n' \
+    "java.util.logging.ConsoleHandler.formatter=java.util.logging.SimpleFormatter" \
+    'java.util.logging.SimpleFormatter.format=%1$tF %1$tT,%1$tL [%2$s] %3$s  %4$s - %5$s %6$s%n' \
     > /home/docmosis/javaLogging.properties
 
 USER docmosis
