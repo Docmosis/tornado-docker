@@ -32,7 +32,11 @@ RUN yum update -y \
     wget \
     #
     && yum clean all \
-    && rm -rf /var/cache/yum
+    && rm -rf /var/cache/yum \
+    #
+    # Install dumb-init to avoid orphaned zombie processes
+    && wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64 \
+    && chmod +x /usr/local/bin/dumb-init
 
 RUN yum install -y https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm \
     && yum clean all \
@@ -105,4 +109,5 @@ ENV DOCMOSIS_OFFICEDIR=/opt/libreoffice \
 
 EXPOSE 8080
 VOLUME /home/docmosis/templates
-CMD java -Dport=8080 -Djava.util.logging.config.file=javaLogging.properties -Ddocmosis.tornado.render.useUrl=http://localhost:8080/ -jar docmosisTornado.war
+ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
+CMD java -Dport=8080 -Djava.util.logging.config.file=javaLogging.properties -jar docmosisTornado.war
