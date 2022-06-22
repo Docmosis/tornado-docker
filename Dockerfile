@@ -6,7 +6,7 @@ RUN yum update -y \
     && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
     && rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7 \
     && yum install -y --setopt=tsflags=nodocs \
-    java-1.8.0-openjdk \
+    java-11-openjdk \
     #
     # libreoffice requirements
     cairo \
@@ -38,7 +38,7 @@ RUN yum install -y https://downloads.sourceforge.net/project/mscorefonts2/rpms/m
     && yum clean all \
     && rm -rf /var/cache/yum
 
-ENV LIBREOFFICE_VERSION=7.3.0.3
+ENV LIBREOFFICE_VERSION=7.3.3.2
 ENV LIBREOFFICE_MIRROR=https://downloadarchive.documentfoundation.org/libreoffice/old/
 
 RUN echo "Downloading LibreOffice ${LIBREOFFICE_VERSION}..." \
@@ -72,7 +72,7 @@ RUN groupadd docmosis \
 
 WORKDIR /home/docmosis
 
-ENV DOCMOSIS_VERSION=2.9.1
+ENV DOCMOSIS_VERSION=2.9.2
 
 RUN DOCMOSIS_VERSION_SHORT=$(echo $DOCMOSIS_VERSION | cut -f1 -d_) \
     && echo "Downloading Docmosis Tornado ${DOCMOSIS_VERSION}..." \
@@ -92,8 +92,15 @@ RUN printf '%s\n' \
     "" \
     "java.util.logging.ConsoleHandler.level=FINE" \
     "java.util.logging.ConsoleHandler.formatter=com.docmosis.webserver.launch.logging.TornadoLogFormatter" \
-    'java.util.logging.ConsoleHandler.format=%1$tH:%1$tM:%1$tS,%1$tL [%2$s] %3$s  %4$s - %5$s %6$s%n' \
+    'com.docmosis.webserver.launch.logging.TornadoLogFormatter.format=%1$tF %1$tT,%1$tL [%2$s] %3$s %4$s - %5$s %6$s%n' \
     > /home/docmosis/javaLogging.properties
+
+# add tini to manage zombie/defunct processes since java process has pid=1
+# if using "docker run" you can use the "--init" parameter which uses tini directly
+ENV TINI_VERSION v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+ENTRYPOINT ["/tini", "--"]
 
 USER docmosis
 RUN mkdir /home/docmosis/templates /home/docmosis/workingarea
