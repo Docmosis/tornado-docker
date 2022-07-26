@@ -76,8 +76,8 @@ ENV DOCMOSIS_VERSION=2.9.2
 
 RUN DOCMOSIS_VERSION_SHORT=$(echo $DOCMOSIS_VERSION | cut -f1 -d_) \
     && echo "Downloading Docmosis Tornado ${DOCMOSIS_VERSION}..." \
-    && echo https://resources.docmosis.com/Downloads/Tornado/${DOCMOSIS_VERSION_SHORT}/docmosisTornado${DOCMOSIS_VERSION}.zip \
-    && wget --quiet https://resources.docmosis.com/Downloads/Tornado/${DOCMOSIS_VERSION_SHORT}/docmosisTornado${DOCMOSIS_VERSION}.zip \
+    && echo https://resources.docmosis.com/SoftwareDownloads/Tornado/${DOCMOSIS_VERSION_SHORT}/docmosisTornado${DOCMOSIS_VERSION}.zip \
+    && wget --quiet https://resources.docmosis.com/SoftwareDownloads/Tornado/${DOCMOSIS_VERSION_SHORT}/docmosisTornado${DOCMOSIS_VERSION}.zip \
     && unzip docmosisTornado${DOCMOSIS_VERSION}.zip docmosisTornado*.war docs/* licenses/* \
     && mv docmosisTornado*.war docmosisTornado.war \
     && rm -f docmosisTornado${DOCMOSIS_VERSION}.zip
