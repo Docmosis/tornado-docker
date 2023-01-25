@@ -59,6 +59,7 @@ Linux Shell:
       -v /home/docmosisTemplates:/home/docmosis/templates \
       -e DOCMOSIS_KEY=XXXX-XXXX-XXXX-XXXX-X-XXXX \
       -e DOCMOSIS_SITE="Free Trial Tornado" \
+      -e DOCMOSIS_ADMINPW=xxxmypwxxx \
       docmosis/tornado
 
 For example, in **Windows** to use a folder C:\docmosisTemplates with a Tornado
@@ -70,6 +71,7 @@ Using Windows CMD:
       -v C:\docmosisTemplates:/home/docmosis/templates ^
       -e DOCMOSIS_KEY=XXXX-XXXX-XXXX-XXXX-X-XXXX ^
       -e DOCMOSIS_SITE="Free Trial Tornado" ^
+      -e DOCMOSIS_ADMINPW=xxxmypwxxx ^
       docmosis/tornado
 
 Using Windows PowerShell:
@@ -78,6 +80,7 @@ Using Windows PowerShell:
       -v C:\docmosisTemplates:/home/docmosis/templates `
       -e DOCMOSIS_KEY=XXXX-XXXX-XXXX-XXXX-X-XXXX `
       -e DOCMOSIS_SITE="Free Trial Tornado" `
+      -e DOCMOSIS_ADMINPW=xxxmypwxxx `
       docmosis/tornado
 
 ## Container Settings
@@ -90,6 +93,7 @@ on):
       -v [host templates directory]:/home/docmosis/templates \
       -e DOCMOSIS_KEY=[license key] \
       -e DOCMOSIS_SITE=[license site] \
+      -e DOCMOSIS_ADMINPW=xxxmypwxxx \
       docmosis/tornado
 
     Parameters:
@@ -154,6 +158,8 @@ The following content could be placed in your docker-compose.yml file:
         environment:
           DOCMOSIS_KEY: "[license key]"
           DOCMOSIS_SITE: "[license site]"
+          DOCMOSIS_ADMINPW: "[admin password]"
+          
 
 ## Running the Server and Testing
 
@@ -351,12 +357,30 @@ page to enable
    ...
   ```
 
+- `allowUNCPaths`  
+   Allow paths to be configured that are UNC paths.
+
+  ```
+  docker run \
+   -e DOCMOSIS_ALLOWUNCPATHS=true \
+   ...
+  ```
+
 - `adminPw`  
   Specify the admin password for access the web console. Optional.
 
   ```
   docker run \
    -e DOCMOSIS_ADMINPW=password \
+   ...
+  ```
+
+- `adminPwAllowBlank`  
+  Allow the password to be blank (assumes deployed in otherwise secured environment). Optional.
+
+  ```
+  docker run \
+   -e DOCMOSIS_ADMINPWALLOWBLANK=true \
    ...
   ```
 

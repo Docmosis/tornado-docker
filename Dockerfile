@@ -1,3 +1,12 @@
+# This is a example Dockerfile showing one way to get Tornado running.  Components can and should
+# be varied as required in accordance with local policies and procedures.
+#
+# Note: as of Tornado 2.9.5, the Tornado Console password must be set or explicitly disabled (see
+#       commented out settings near the bottom of this file).  
+#       Without a password set, security of the configuration and operation of Tornado relies heavily
+#       on local network/host security.
+
+
 FROM centos:7
 
 # epel for cabextract
@@ -38,7 +47,7 @@ RUN yum install -y https://downloads.sourceforge.net/project/mscorefonts2/rpms/m
     && yum clean all \
     && rm -rf /var/cache/yum
 
-ENV LIBREOFFICE_VERSION=7.3.3.2
+ENV LIBREOFFICE_VERSION=7.4.4.2
 ENV LIBREOFFICE_MIRROR=https://downloadarchive.documentfoundation.org/libreoffice/old/
 
 RUN echo "Downloading LibreOffice ${LIBREOFFICE_VERSION}..." \
@@ -72,7 +81,7 @@ RUN groupadd docmosis \
 
 WORKDIR /home/docmosis
 
-ENV DOCMOSIS_VERSION=2.9.4
+ENV DOCMOSIS_VERSION=2.9.5
 
 RUN DOCMOSIS_VERSION_SHORT=$(echo $DOCMOSIS_VERSION | cut -f1 -d_) \
     && echo "Downloading Docmosis Tornado ${DOCMOSIS_VERSION}..." \
@@ -109,6 +118,16 @@ RUN mkdir /home/docmosis/templates /home/docmosis/workingarea
 ENV DOCMOSIS_OFFICEDIR=/opt/libreoffice \
     DOCMOSIS_TEMPLATESDIR=templates \
     DOCMOSIS_WORKINGDIR=workingarea
+
+# Set password (recommended)
+# Need not be hard coded here, it could be passed as a variable from the system invoking Docker,
+#ENV DOCMOSIS_ADMINPW=
+
+# Allow blank password (local network and host security has been configured to remove the need).
+#ENV DOCMOSIS_ADMINPWALLOWBLANK=true
+
+# Allow UNC paths in Tornado configuration.  Disabled by default because of inherent security risk).
+#ENV DOCMOSIS_ALLOWUNCPATHS=true
 
 EXPOSE 8080
 VOLUME /home/docmosis/templates
