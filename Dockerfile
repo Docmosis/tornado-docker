@@ -2,18 +2,15 @@
 # be varied as required in accordance with local policies and procedures.
 #
 # Note: as of Tornado 2.9.5, the Tornado Console password must be set or explicitly disabled (see
-#       commented out settings near the bottom of this file).  
+#       commented out settings near the bottom of this file).
 #       Without a password set, security of the configuration and operation of Tornado relies heavily
 #       on local network/host security.
 
 
-FROM centos:7
+FROM fedora:latest
 
 # epel for cabextract
 RUN yum update -y \
-    && rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7 \
-    && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
-    && rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7 \
     && yum install -y --setopt=tsflags=nodocs \
     java-11-openjdk \
     #
