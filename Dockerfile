@@ -1,7 +1,7 @@
 # This is a example Dockerfile showing one way to get Tornado running.  Components can and should
 # be varied as required in accordance with local policies and procedures.
 #
-# Note: as of Tornado 2.9.5, the Tornado Console password must be set or explicitly disabled (see
+# Note: the Tornado Console password must be set or explicitly disabled (see
 #       commented out settings near the bottom of this file).
 #       Without a password set, security of the configuration and operation of Tornado relies heavily
 #       on local network/host security.
@@ -78,7 +78,7 @@ RUN groupadd docmosis \
 
 WORKDIR /home/docmosis
 
-ENV DOCMOSIS_VERSION=2.9.5
+ENV DOCMOSIS_VERSION=2.9.6
 
 RUN DOCMOSIS_VERSION_SHORT=$(echo $DOCMOSIS_VERSION | cut -f1 -d_) \
     && echo "Downloading Docmosis Tornado ${DOCMOSIS_VERSION}..." \
