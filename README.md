@@ -542,6 +542,9 @@ The following settings provide network specific adjustments:
 - `mailUseSsl`  
   Enable SSL security on the connection to the mail server. Default false.
 
+- `mailSecurityProtocols`  
+  Specify the security protocols to use (comma separated) (default TLSv1.2.  Blank value means use JVM default).
+
 - `mailConnectRetryMaxTimes`  
   Set the maximum number of attempts to connect to the mail server.
   Default 2.

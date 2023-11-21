@@ -44,7 +44,7 @@ RUN yum install -y https://downloads.sourceforge.net/project/mscorefonts2/rpms/m
     && yum clean all \
     && rm -rf /var/cache/yum
 
-ENV LIBREOFFICE_VERSION=7.4.4.2
+ENV LIBREOFFICE_VERSION=7.5.7.1
 ENV LIBREOFFICE_MIRROR=https://downloadarchive.documentfoundation.org/libreoffice/old/
 
 RUN echo "Downloading LibreOffice ${LIBREOFFICE_VERSION}..." \
@@ -78,7 +78,7 @@ RUN groupadd docmosis \
 
 WORKDIR /home/docmosis
 
-ENV DOCMOSIS_VERSION=2.9.6
+ENV DOCMOSIS_VERSION=2.9.7
 
 RUN DOCMOSIS_VERSION_SHORT=$(echo $DOCMOSIS_VERSION | cut -f1 -d_) \
     && echo "Downloading Docmosis Tornado ${DOCMOSIS_VERSION}..." \
