@@ -1,0 +1,131 @@
+# This is a example Dockerfile showing one way to get Tornado running.  Components can and should
+# be varied as required in accordance with local policies and procedures.
+#
+# Note: the Tornado Console password must be set or explicitly disabled (see
+#       commented out settings near the bottom of this file).
+#       Without a password set, security of the configuration and operation of Tornado relies heavily
+#       on local network/host security.
+
+
+FROM redhat/ubi9
+
+# epel for cabextract
+RUN yum update -y \
+    && rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-9 \
+    && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm \
+    && yum install -y --setopt=tsflags=nodocs \
+    java-17-openjdk \
+    #
+    # libreoffice requirements
+    cairo \
+    cups-libs \
+    dbus-glib \
+    glib2 \
+    libSM \
+    libXinerama \
+    mesa-libGL \
+    #
+    # extra fonts
+    gnu-free-mono-fonts \
+    gnu-free-sans-fonts \
+    gnu-free-serif-fonts \
+    #
+    # mscorefonts dependencies
+    cabextract \
+    #
+    # utilities
+    unzip \
+    wget \
+    #
+    && yum clean all \
+    && rm -rf /var/cache/yum
+
+RUN yum install -y https://github.com/placaze/mscorefonts2/releases/download/2.6.1/msttcore-fonts-installer-2.6.1-1.noarch.rpm \
+    && yum clean all \
+    && rm -rf /var/cache/yum
+
+ENV LIBREOFFICE_VERSION=7.5.7.1
+ENV LIBREOFFICE_MIRROR=https://downloadarchive.documentfoundation.org/libreoffice/old/
+
+RUN echo "Downloading LibreOffice ${LIBREOFFICE_VERSION}..." \
+    && echo ${LIBREOFFICE_MIRROR}${LIBREOFFICE_VERSION}/rpm/x86_64/LibreOffice_${LIBREOFFICE_VERSION}_Linux_x86-64_rpm.tar.gz \
+    && wget ${LIBREOFFICE_MIRROR}${LIBREOFFICE_VERSION}/rpm/x86_64/LibreOffice_${LIBREOFFICE_VERSION}_Linux_x86-64_rpm.tar.gz \
+    && tar -xf LibreOffice_${LIBREOFFICE_VERSION}_Linux_x86-64_rpm.tar.gz \
+    && cd LibreOffice_*_Linux_x86-64_rpm/RPMS \
+    && (rm -f *integ* || true) \
+    && (rm -f *desk* || true) \
+    && yum localinstall -y --setopt=tsflags=nodocs *.rpm \
+    && yum clean all \
+    && rm -rf /var/cache/yum \
+    && cd ../.. \
+    && rm -rf LibreOffice_*_Linux_x86-64_rpm \
+    && rm -f LibreOffice_*_Linux_x86-64_rpm.tar.gz \
+    && ln -s /opt/libreoffice* /opt/libreoffice
+
+# mscorefonts2 does not currently install cambria.ttc
+RUN echo "Downloading Cambria font collection..." \
+    && wget --quiet -O PowerPointViewer.exe http://downloads.sourceforge.net/mscorefonts2/PowerPointViewer.exe \
+    && cabextract --lowercase -F 'ppviewer.cab' PowerPointViewer.exe \
+    && cabextract --lowercase -F '*.ttc' --directory=/usr/share/fonts/msttcore ppviewer.cab \
+    && rm -f PowerPointViewer.exe ppviewer.cab
+
+RUN groupadd docmosis \
+    && useradd -g docmosis \
+    --create-home \
+    --shell /sbin/nologin \
+    --comment "Docmosis user" \
+    docmosis
+
+WORKDIR /home/docmosis
+
+ENV DOCMOSIS_VERSION=2.9.7
+
+RUN DOCMOSIS_VERSION_SHORT=$(echo $DOCMOSIS_VERSION | cut -f1 -d_) \
+    && echo "Downloading Docmosis Tornado ${DOCMOSIS_VERSION}..." \
+    && echo https://resources.docmosis.com/SoftwareDownloads/Tornado/${DOCMOSIS_VERSION_SHORT}/docmosisTornado${DOCMOSIS_VERSION}.zip \
+    && wget --quiet https://resources.docmosis.com/SoftwareDownloads/Tornado/${DOCMOSIS_VERSION_SHORT}/docmosisTornado${DOCMOSIS_VERSION}.zip \
+    && unzip docmosisTornado${DOCMOSIS_VERSION}.zip docmosisTornado*.war docs/* licenses/* \
+    && mv docmosisTornado*.war docmosisTornado.war \
+    && rm -f docmosisTornado${DOCMOSIS_VERSION}.zip
+
+RUN printf '%s\n' \
+    "handlers=java.util.logging.ConsoleHandler" \
+    "#Normal logging at INFO level" \
+    ".level=INFO" \
+    "" \
+    "#Detailed logging at DEBUG level" \
+    "#.level=FINE" \
+    "" \
+    "java.util.logging.ConsoleHandler.level=FINE" \
+    "java.util.logging.ConsoleHandler.formatter=com.docmosis.webserver.launch.logging.TornadoLogFormatter" \
+    'com.docmosis.webserver.launch.logging.TornadoLogFormatter.format=[%1$tF %1$tT,%1$tL][%3$s][%2$s][%4$s] %5$s %6$s%n' \
+    > /home/docmosis/javaLogging.properties
+
+# add tini to manage zombie/defunct processes since java process has pid=1
+# if using "docker run" you can use the "--init" parameter which uses tini directly
+ENV TINI_VERSION v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+ENTRYPOINT ["/tini", "--"]
+
+USER docmosis
+RUN mkdir /home/docmosis/templates /home/docmosis/workingarea
+
+# Tornado configuration
+ENV DOCMOSIS_OFFICEDIR=/opt/libreoffice \
+    DOCMOSIS_TEMPLATESDIR=templates \
+    DOCMOSIS_WORKINGDIR=workingarea
+
+# Set password (recommended)
+# Need not be hard coded here, it could be passed as a variable from the system invoking Docker,
+#ENV DOCMOSIS_ADMINPW=
+
+# Allow blank password (local network and host security has been configured to remove the need).
+#ENV DOCMOSIS_ADMINPWALLOWBLANK=true
+
+# Allow UNC paths in Tornado configuration.  Disabled by default because of inherent security risk).
+#ENV DOCMOSIS_ALLOWUNCPATHS=true
+
+EXPOSE 8080
+VOLUME /home/docmosis/templates
+CMD java -Dport=8080 -Djava.util.logging.config.file=javaLogging.properties -jar docmosisTornado.war
