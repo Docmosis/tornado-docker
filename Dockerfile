@@ -54,7 +54,7 @@ RUN echo "Downloading LibreOffice ${LIBREOFFICE_VERSION}..." \
     && cd LibreOffice_*_Linux_x86-64_rpm/RPMS \
     && (rm -f *integ* || true) \
     && (rm -f *desk* || true) \
-    && yum localinstall -y --setopt=tsflags=nodocs *.rpm \
+    && yum install -y --setopt=tsflags=nodocs *.rpm \
     && yum clean all \
     && rm -rf /var/cache/yum \
     && cd ../.. \
