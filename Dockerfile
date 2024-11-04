@@ -44,17 +44,18 @@ RUN yum install -y https://downloads.sourceforge.net/project/mscorefonts2/rpms/m
     && yum clean all \
     && rm -rf /var/cache/yum
 
-ENV LIBREOFFICE_VERSION=7.5.7.1
-ENV LIBREOFFICE_MIRROR=https://downloadarchive.documentfoundation.org/libreoffice/old/
+ENV LIBREOFFICE_VERSION=7.5.9.2
+ENV LIBREOFFICE_MIRROR=https://s3.us-west-2.amazonaws.com/com.docmosis.public.download.archive/downloads/libreoffice/
+ENV LIBREOFFICE_ARCHIVE=LibreOffice_${LIBREOFFICE_VERSION}_Linux_x86-64_Collabora-Build.rpm.tar.gz
 
-RUN echo "Downloading LibreOffice ${LIBREOFFICE_VERSION}..." \
-    && echo ${LIBREOFFICE_MIRROR}${LIBREOFFICE_VERSION}/rpm/x86_64/LibreOffice_${LIBREOFFICE_VERSION}_Linux_x86-64_rpm.tar.gz \
-    && wget ${LIBREOFFICE_MIRROR}${LIBREOFFICE_VERSION}/rpm/x86_64/LibreOffice_${LIBREOFFICE_VERSION}_Linux_x86-64_rpm.tar.gz \
-    && tar -xf LibreOffice_${LIBREOFFICE_VERSION}_Linux_x86-64_rpm.tar.gz \
+RUN  echo "Downloading LibreOffice ${LIBREOFFICE_VERSION}..." \
+    && echo ${LIBREOFFICE_MIRROR}${LIBREOFFICE_ARCHIVE} \
+    && wget ${LIBREOFFICE_MIRROR}${LIBREOFFICE_ARCHIVE} \
+    && tar -xf ${LIBREOFFICE_ARCHIVE} \
     && cd LibreOffice_*_Linux_x86-64_rpm/RPMS \
     && (rm -f *integ* || true) \
     && (rm -f *desk* || true) \
-    && yum localinstall -y --setopt=tsflags=nodocs *.rpm \
+    && yum install -y --setopt=tsflags=nodocs *.rpm \
     && yum clean all \
     && rm -rf /var/cache/yum \
     && cd ../.. \
@@ -78,7 +79,7 @@ RUN groupadd docmosis \
 
 WORKDIR /home/docmosis
 
-ENV DOCMOSIS_VERSION=2.9.7
+ENV DOCMOSIS_VERSION=2.10.0
 
 RUN DOCMOSIS_VERSION_SHORT=$(echo $DOCMOSIS_VERSION | cut -f1 -d_) \
     && echo "Downloading Docmosis Tornado ${DOCMOSIS_VERSION}..." \
