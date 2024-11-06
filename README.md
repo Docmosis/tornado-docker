@@ -45,7 +45,11 @@ The following steps will create a running Tornado server for you to work with.
 
 3. Build the Docmosis Tornado Docker image:
 
-   docker build --tag docmosis/tornado https://raw.githubusercontent.com/docmosis/tornado-docker/master/Dockerfile
+   Main choice based on Fedora:<br>
+   `docker build --tag docmosis/tornado https://raw.githubusercontent.com/docmosis/tornado-docker/master/Dockerfile`
+
+   Alternative choice based on Red Hat Universal Base Image (UBI):<br>
+   `docker build --tag docmosis/tornado https://raw.githubusercontent.com/docmosis/tornado-docker/master/Dockerfile-ubi9`
 
 4. Launch a Tornado container as follows, inserting your license key and path to
    templates folder.
