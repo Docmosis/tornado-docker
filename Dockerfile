@@ -115,7 +115,8 @@ RUN mkdir /home/docmosis/templates /home/docmosis/workingarea
 # Tornado configuration
 ENV DOCMOSIS_OFFICEDIR=/opt/libreoffice \
     DOCMOSIS_TEMPLATESDIR=templates \
-    DOCMOSIS_WORKINGDIR=workingarea
+    DOCMOSIS_WORKINGDIR=workingarea \
+    LANG=C.UTF-8
 
 # Set password (recommended)
 # Need not be hard coded here, it could be passed as a variable from the system invoking Docker,
