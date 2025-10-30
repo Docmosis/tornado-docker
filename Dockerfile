@@ -79,7 +79,7 @@ RUN groupadd docmosis \
 
 WORKDIR /home/docmosis
 
-ENV DOCMOSIS_VERSION=2.10.2
+ENV DOCMOSIS_VERSION=2.10.3
 
 RUN DOCMOSIS_VERSION_SHORT=$(echo $DOCMOSIS_VERSION | cut -f1 -d_) \
     && echo "Downloading Docmosis Tornado ${DOCMOSIS_VERSION}..." \
@@ -104,7 +104,7 @@ RUN printf '%s\n' \
 
 # add tini to manage zombie/defunct processes since java process has pid=1
 # if using "docker run" you can use the "--init" parameter which uses tini directly
-ENV TINI_VERSION v0.19.0
+ENV TINI_VERSION=v0.19.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
 RUN chmod +x /tini
 ENTRYPOINT ["/tini", "--"]
@@ -130,4 +130,4 @@ ENV DOCMOSIS_OFFICEDIR=/opt/libreoffice \
 
 EXPOSE 8080
 VOLUME /home/docmosis/templates
-CMD java -Dport=8080 -Djava.util.logging.config.file=javaLogging.properties -Ddocmosis.tornado.render.useUrl=http://localhost:8080/ -jar docmosisTornado.war
+CMD ["java", "-Dport=8080", "-Djava.util.logging.config.file=javaLogging.properties", "-Ddocmosis.tornado.render.useUrl=http://localhost:8080/", "-jar", "docmosisTornado.war"]
