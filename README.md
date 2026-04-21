@@ -485,7 +485,6 @@ The following settings can be added when launching Tornado to enable SSL/TLS Enc
   Determines whether the non-secure listener should be disabled. Defaults to
   false.
 
-<!--
   ```
   docker run -p 8081:8081 \
    -e DOCMOSIS_SSL_PORT=8081 \
@@ -496,7 +495,6 @@ The following settings can be added when launching Tornado to enable SSL/TLS Enc
    -e DOCMOSIS_HTTP_DISABLE=true \
    ...
   ```
--->
 
 Please see your Java documentation for more information on the specifics of what
 these settings do.
