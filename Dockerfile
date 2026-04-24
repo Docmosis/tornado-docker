@@ -104,7 +104,7 @@ WORKDIR /home/docmosis
 # Tornado application
 ###############################################################################
 
-ENV DOCMOSIS_VERSION=2.11.1
+ENV DOCMOSIS_VERSION=2.11.2
 
 RUN DOCMOSIS_VERSION_SHORT=$(echo $DOCMOSIS_VERSION | cut -f1 -d_) \
     && wget --show-progress https://resources.docmosis.com/SoftwareDownloads/Tornado/${DOCMOSIS_VERSION_SHORT}/docmosisTornado${DOCMOSIS_VERSION}.zip \
